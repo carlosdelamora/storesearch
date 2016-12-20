@@ -8,7 +8,7 @@
 
 import Foundation
 
-class SearchResults{
+class SearchResult{
     var name = ""
     var artistName = ""
 }

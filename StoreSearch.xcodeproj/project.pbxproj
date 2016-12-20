@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CA24FAB71E09DBE50003071C /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA24FAB61E09DBE50003071C /* SearchResult.swift */; };
 		CA6C4BB51E09B515003E0307 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA6C4BB41E09B515003E0307 /* AppDelegate.swift */; };
 		CA6C4BB71E09B515003E0307 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA6C4BB61E09B515003E0307 /* SearchViewController.swift */; };
 		CA6C4BBA1E09B515003E0307 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CA6C4BB81E09B515003E0307 /* Main.storyboard */; };
@@ -15,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CA24FAB61E09DBE50003071C /* SearchResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
 		CA6C4BB11E09B515003E0307 /* StoreSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StoreSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA6C4BB41E09B515003E0307 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CA6C4BB61E09B515003E0307 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -56,6 +58,7 @@
 			children = (
 				CA6C4BB41E09B515003E0307 /* AppDelegate.swift */,
 				CA6C4BB61E09B515003E0307 /* SearchViewController.swift */,
+				CA24FAB61E09DBE50003071C /* SearchResult.swift */,
 				CA6C4BB81E09B515003E0307 /* Main.storyboard */,
 				CA6C4BBB1E09B515003E0307 /* Assets.xcassets */,
 				CA6C4BBD1E09B515003E0307 /* LaunchScreen.storyboard */,
@@ -138,6 +141,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CA6C4BB71E09B515003E0307 /* SearchViewController.swift in Sources */,
+				CA24FAB71E09DBE50003071C /* SearchResult.swift in Sources */,
 				CA6C4BB51E09B515003E0307 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -300,6 +304,7 @@
 				CA6C4BC51E09B515003E0307 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
