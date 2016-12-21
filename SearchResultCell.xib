@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_0" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SearchResultCell" id="C8U-KY-AaN" customClass="SearchResultCell" customModule="StoreSearch" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="C8U-KY-AaN" id="MbR-6S-kNI">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="79.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wYW-GV-ZwI">
+                        <rect key="frame" x="90" y="15" width="269" height="22"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Artist Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JdY-1d-VYW">
+                        <rect key="frame" x="90" y="38.5" width="269" height="18"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" white="0.0" alpha="0.5" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="uEZ-kC-OOE">
+                        <rect key="frame" x="15" y="10" width="60" height="60"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="60" id="apY-g3-u0q"/>
+                            <constraint firstAttribute="height" constant="60" id="ctV-34-B5G"/>
+                        </constraints>
+                    </imageView>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailingMargin" secondItem="JdY-1d-VYW" secondAttribute="trailing" constant="8" id="NQC-Hr-pkF"/>
+                    <constraint firstItem="wYW-GV-ZwI" firstAttribute="top" secondItem="MbR-6S-kNI" secondAttribute="top" constant="15" id="OXk-6M-Kzn"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="JdY-1d-VYW" secondAttribute="bottom" constant="15" id="ToV-JH-S2F"/>
+                    <constraint firstItem="uEZ-kC-OOE" firstAttribute="leading" secondItem="MbR-6S-kNI" secondAttribute="leading" constant="15" id="YJ9-2A-m0f"/>
+                    <constraint firstItem="uEZ-kC-OOE" firstAttribute="top" secondItem="MbR-6S-kNI" secondAttribute="top" constant="10" id="cyV-Qp-SIK"/>
+                    <constraint firstItem="JdY-1d-VYW" firstAttribute="leading" secondItem="uEZ-kC-OOE" secondAttribute="trailing" constant="15" id="dVE-IX-xg2"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="wYW-GV-ZwI" secondAttribute="trailing" constant="8" id="hfG-Il-5qB"/>
+                    <constraint firstItem="wYW-GV-ZwI" firstAttribute="leading" secondItem="uEZ-kC-OOE" secondAttribute="trailing" constant="15" id="rcl-pN-KcI"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="artistNameLabel" destination="JdY-1d-VYW" id="5cF-H8-qJV"/>
+                <outlet property="artworkImageView" destination="uEZ-kC-OOE" id="z1I-Dn-LfN"/>
+                <outlet property="nameLabel" destination="wYW-GV-ZwI" id="948-vW-RMO"/>
+            </connections>
+            <point key="canvasLocation" x="-120.5" y="-10"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="Placeholder" width="60" height="60"/>
+    </resources>
+</document>
