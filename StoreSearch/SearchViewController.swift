@@ -28,6 +28,9 @@ class SearchViewController: UIViewController {
         tableView.register(cellNib, forCellReuseIdentifier: tableViewCellIdentifiers.searchResultCell)
         cellNib = UINib(nibName: tableViewCellIdentifiers.nothingFoundCell, bundle: nil)
         tableView.register(cellNib, forCellReuseIdentifier: tableViewCellIdentifiers.nothingFoundCell)
+        
+        //make the keyboard available in the first appearence
+        searchBar.becomeFirstResponder()
     }
 
     override func didReceiveMemoryWarning() {
