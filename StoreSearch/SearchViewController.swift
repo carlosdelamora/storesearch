@@ -14,7 +14,8 @@ class SearchViewController: UIViewController {
     var searchResults = [SearchResult]()
     var hasSearched:Bool = false
     var isLoading: Bool = false
-   
+    var dataTask: URLSessionDataTask?
+    
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     
@@ -203,6 +204,7 @@ extension SearchViewController: UISearchBarDelegate{
         if !searchBar.text!.isEmpty{
             searchBar.resignFirstResponder()
             
+            dataTask?.cancel()
             isLoading = true
             tableView.reloadData()
             
@@ -213,11 +215,11 @@ extension SearchViewController: UISearchBarDelegate{
            
             let url = self.iTunesURL(searchBar.text!)
             let session = URLSession.shared
-            let dataTask = session.dataTask(with: url, completionHandler: { (data, response, error) in
+            dataTask = session.dataTask(with: url, completionHandler: { (data, response, error) in
                 
-                
-                if let error = error{
-                    print("error \(error)")
+                //if there is an error and the error has the code -999 the task was cancelled else continue
+                if let error = error as? NSError, error.code == -999 {
+                    return
                 }else if let response = response as? HTTPURLResponse, 200 <= response.statusCode && response.statusCode <= 299{
                     
                     if let data = data, let jsonDictionary = self.parseJson(json: data){
@@ -242,7 +244,7 @@ extension SearchViewController: UISearchBarDelegate{
                 
             })
             
-            dataTask.resume()
+            dataTask?.resume()
         }
     }
     
