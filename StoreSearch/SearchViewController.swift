@@ -13,7 +13,7 @@ class SearchViewController: UIViewController {
     //MARK: Properties
     var searchResults = [SearchResult]()
     var hasSearched:Bool = false
-    
+    var isLoading: Bool = false
    
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
@@ -28,6 +28,8 @@ class SearchViewController: UIViewController {
         tableView.register(cellNib, forCellReuseIdentifier: tableViewCellIdentifiers.searchResultCell)
         cellNib = UINib(nibName: tableViewCellIdentifiers.nothingFoundCell, bundle: nil)
         tableView.register(cellNib, forCellReuseIdentifier: tableViewCellIdentifiers.nothingFoundCell)
+        cellNib = UINib(nibName: tableViewCellIdentifiers.loadingCell, bundle: nil)
+        tableView.register(cellNib, forCellReuseIdentifier: tableViewCellIdentifiers.loadingCell)
         
         //make the keyboard available in the first appearence
         searchBar.becomeFirstResponder()
@@ -41,11 +43,12 @@ class SearchViewController: UIViewController {
     struct tableViewCellIdentifiers{
         static let searchResultCell = "SearchResultCell"
         static let nothingFoundCell = "NothingFoundCell"
+        static let loadingCell = "LoadingCell"
     }
     
     func iTunesURL(_ searchText: String)-> URL{
         let escapedSearchText = searchText.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
-        let urlString = String(format: "https://itunes.apple.com/search?term=%@", escapedSearchText)
+        let urlString = String(format: "https://itunes.apple.com/search?term=%@&limit=200", escapedSearchText)
         let url = URL(string: urlString)
         return url!
     }
@@ -211,26 +214,41 @@ extension SearchViewController: UISearchBarDelegate{
         if !searchBar.text!.isEmpty{
             searchBar.resignFirstResponder()
             
+            isLoading = true
+            tableView.reloadData()
+            
+            
+            
             searchResults = []
             hasSearched = true
             
-            let url = iTunesURL(searchBar.text!)
-            print("URL \(url)")
-            
-            if let jsonString = performStoreRequest(with: url){
-                print("Performed json String with \(jsonString)")
+            let queue = DispatchQueue.global()
+            queue.async {
+                let url = self.iTunesURL(searchBar.text!)
+                print("URL \(url)")
                 
-                if let jsonDictionary = parseJson(jsonString){
-                    print("Dictionary \(jsonDictionary)")
+                if let jsonString = self.performStoreRequest(with: url){
+                    print("Performed json String with \(jsonString)")
                     
-                    searchResults = parseDictionary(dictionary: jsonDictionary)
-                    searchResults.sort(by: { $0 < $1 })
-                    tableView.reloadData()//this has changed
-                    return //do we need this?
+                    if let jsonDictionary = self.parseJson(jsonString){
+                        print("Dictionary \(jsonDictionary)")
+                        
+                        self.searchResults = self.parseDictionary(dictionary: jsonDictionary)
+                        self.searchResults.sort(by: { $0 < $1 })
+                        
+                        DispatchQueue.main.async {
+                            self.isLoading = false
+                            self.tableView.reloadData()
+                        }
+                        
+                        return
+                    }
+                    DispatchQueue.main.async {
+                        self.showNetworkError()
+                    }
                 }
             }
-            
-            showNetworkError()
+            //showNetworkError()
         }
     }
     
@@ -244,11 +262,23 @@ extension SearchViewController: UISearchBarDelegate{
 
 extension SearchViewController: UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let a: Int = hasSearched ? max(searchResults.count,1) : 0
-        return a
+        
+        if isLoading{
+            return 1
+        }else{
+            let a: Int = hasSearched ? max(searchResults.count,1) : 0
+            return a
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        if isLoading{
+            let cell = tableView.dequeueReusableCell(withIdentifier: tableViewCellIdentifiers.loadingCell, for: indexPath)
+            let spiner = cell.viewWithTag(100) as! UIActivityIndicatorView
+            spiner.startAnimating()
+            return cell
+        }
         
         if searchResults.count == 0{
             return tableView.dequeueReusableCell(withIdentifier: tableViewCellIdentifiers.nothingFoundCell, for: indexPath)
@@ -268,37 +298,35 @@ extension SearchViewController: UITableViewDataSource{
         
     }
     
-    func kindForDisplay(_ kind: String) -> String{
-        switch kind {
-            case "album": return "Album"
-            case "audiobook": return "Audio Book"
-            case "book": return "Book"
-            case "ebook": return "E-Book"
-            case "feature-movie": return "Movie"
-            case "music-video": return "Music Video"
-            case "podcast": return "Podcast"
-            case "software": return "App"
-            case "song": return "Song"
-            case "tv-episode": return "TV Episode"
-            default: return kind
-        }
-    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        if searchResults.count == 0 {
+        if searchResults.count == 0 || isLoading{
             return nil
         }else{
             return indexPath
         }
     }
     
-    
-    
-    
+    func kindForDisplay(_ kind: String) -> String{
+        switch kind {
+        case "album": return "Album"
+        case "audiobook": return "Audio Book"
+        case "book": return "Book"
+        case "ebook": return "E-Book"
+        case "feature-movie": return "Movie"
+        case "music-video": return "Music Video"
+        case "podcast": return "Podcast"
+        case "software": return "App"
+        case "song": return "Song"
+        case "tv-episode": return "TV Episode"
+        default: return kind
+        }
+    }
+
 }
 
 extension SearchViewController: UITableViewDelegate{
