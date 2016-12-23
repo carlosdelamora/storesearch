@@ -53,20 +53,9 @@ class SearchViewController: UIViewController {
         return url!
     }
     
-    func performStoreRequest(with url: URL)-> String?{
-        do{
-            let stringContents = try String(contentsOf: url, encoding: .utf8)
-            return stringContents
-        }catch{
-            print("Download error \(error)")
-            return nil
-        }
-    }
+    
 
-    func parseJson(_ json: String)-> [String: Any]?{
-        guard let data = json.data(using: .utf8, allowLossyConversion: false)else{
-            return nil
-        }
+    func parseJson(json data: Data)-> [String: Any]?{
         
         do{
             return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
@@ -217,38 +206,43 @@ extension SearchViewController: UISearchBarDelegate{
             isLoading = true
             tableView.reloadData()
             
-            
-            
             searchResults = []
             hasSearched = true
             
-            let queue = DispatchQueue.global()
-            queue.async {
-                let url = self.iTunesURL(searchBar.text!)
-                print("URL \(url)")
+           
+           
+            let url = self.iTunesURL(searchBar.text!)
+            let session = URLSession.shared
+            let dataTask = session.dataTask(with: url, completionHandler: { (data, response, error) in
                 
-                if let jsonString = self.performStoreRequest(with: url){
-                    print("Performed json String with \(jsonString)")
+                
+                if let error = error{
+                    print("error \(error)")
+                }else if let response = response as? HTTPURLResponse, 200 <= response.statusCode && response.statusCode <= 299{
                     
-                    if let jsonDictionary = self.parseJson(jsonString){
-                        print("Dictionary \(jsonDictionary)")
-                        
+                    if let data = data, let jsonDictionary = self.parseJson(json: data){
                         self.searchResults = self.parseDictionary(dictionary: jsonDictionary)
-                        self.searchResults.sort(by: { $0 < $1 })
-                        
+                        self.searchResults.sort(by: <)
                         DispatchQueue.main.async {
                             self.isLoading = false
                             self.tableView.reloadData()
                         }
-                        
                         return
                     }
-                    DispatchQueue.main.async {
-                        self.showNetworkError()
-                    }
+                    
                 }
-            }
-            //showNetworkError()
+                
+                DispatchQueue.main.async {
+                    self.hasSearched = false
+                    self.isLoading = false
+                    self.tableView.reloadData()
+                    self.showNetworkError()
+                }
+                print("failure \(response)")
+                
+            })
+            
+            dataTask.resume()
         }
     }
     
