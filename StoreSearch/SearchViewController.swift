@@ -232,7 +232,7 @@ extension SearchViewController: UISearchBarDelegate{
            
             let url = self.iTunesURL(searchBar.text!, category: segmentedControl.selectedSegmentIndex)
             let session = URLSession.shared
-            dataTask = session.dataTask(with: url, completionHandler: { (data, response, error) in
+            dataTask = session.dataTask(with: url) { (data, response, error) in
                 
                 //if there is an error and the error has the code -999 the task was cancelled else continue
                 if let error = error as? NSError, error.code == -999 {
@@ -259,7 +259,7 @@ extension SearchViewController: UISearchBarDelegate{
                 }
                 print("failure \(response)")
                 
-            })
+            }
             
             dataTask?.resume()
         }
@@ -301,14 +301,8 @@ extension SearchViewController: UITableViewDataSource{
         }else{
             let cell = tableView.dequeueReusableCell(withIdentifier: tableViewCellIdentifiers.searchResultCell, for:indexPath) as! SearchResultCell
             let searchResult = searchResults[indexPath.row]
-            cell.nameLabel.text = searchResult.name
+            cell.configure(for: searchResult)
             
-            if searchResult.artistName.isEmpty{
-                searchResult.artistName = "Unkown"
-            }else{
-                cell.artistNameLabel.text = String(format: "%@ (%@)", searchResult.artistName, kindForDisplay(searchResult.kind))
-            }
-        
             return cell
         }
         
@@ -327,22 +321,6 @@ extension SearchViewController: UITableViewDataSource{
         }
     }
     
-    func kindForDisplay(_ kind: String) -> String{
-        switch kind {
-        case "album": return "Album"
-        case "audiobook": return "Audio Book"
-        case "book": return "Book"
-        case "ebook": return "E-Book"
-        case "feature-movie": return "Movie"
-        case "music-video": return "Music Video"
-        case "podcast": return "Podcast"
-        case "software": return "App"
-        case "song": return "Song"
-        case "tv-episode": return "TV Episode"
-        default: return kind
-        }
-    }
-
 }
 
 extension SearchViewController: UITableViewDelegate{
