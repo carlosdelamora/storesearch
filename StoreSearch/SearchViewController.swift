@@ -141,7 +141,7 @@ class SearchViewController: UIViewController {
         }
         
         if let genre = dictionary["primaryGenreName"] as? String{
-            searchResult.genere = genre
+            searchResult.genre = genre
         }
         
         return searchResult
@@ -158,12 +158,13 @@ class SearchViewController: UIViewController {
         searchResult.kind = "audiobook"
         searchResult.currency = dictionary["currency"] as! String
         
+        
         if let price = dictionary["collectionPrice"] as? Double{
             searchResult.price = price
         }
         
         if let genre = dictionary["primaryGenreName"] as? String{
-            searchResult.genere = genre
+            searchResult.genre = genre
         }
         
         return searchResult
@@ -180,12 +181,13 @@ class SearchViewController: UIViewController {
         searchResult.kind = dictionary["kind"] as! String
         searchResult.currency = dictionary["currency"] as! String
         
+        
         if let price = dictionary["price"] as? Double{
             searchResult.price = price
         }
         
         if let genre = dictionary["primaryGenreName"] as? String{
-            searchResult.genere = genre
+            searchResult.genre = genre
         }
         
         return searchResult
@@ -202,15 +204,25 @@ class SearchViewController: UIViewController {
         searchResult.kind = dictionary["kind"] as! String
         searchResult.currency = dictionary["currency"] as! String
         
+        
         if let price = dictionary["price"] as? Double{
             searchResult.price = price
         }
         
-        if let genres: Any = dictionary["genres"] as? String{
-            searchResult.genere = (genres as! [String]).joined(separator: ", ")
+        if let genres: Any = dictionary["genres"] as? [String]{
+            searchResult.genre = (genres as! [String]).joined(separator: ", ")
         }
         
         return searchResult
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "ShowDetail"{
+            let detailViewController = segue.destination as! DetailViewController
+            let indexPath = sender as! IndexPath
+            let searchResult = searchResults[indexPath.row]
+            detailViewController.searchResult = searchResult
+        }
     }
 }
 
@@ -311,6 +323,7 @@ extension SearchViewController: UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        performSegue(withIdentifier: "ShowDetail", sender: indexPath)
     }
     
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
