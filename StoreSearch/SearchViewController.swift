@@ -36,22 +36,35 @@ class SearchViewController: UIViewController {
         
         //make the keyboard available in the first appearence
         searchBar.becomeFirstResponder()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(sizeChanged), name:NSNotification.Name.UIContentSizeCategoryDidChange , object: nil)
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        
+    override func viewWillDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
+        print("no more notifications")
     }
+    
     
     //MARK: actions
     @IBAction func segmentChanged(_ sender: UISegmentedControl) {
         performSearch()
         print("segment changed \(sender.selectedSegmentIndex)")
     }
+    
+    
+    
+   
+    
     struct tableViewCellIdentifiers{
         static let searchResultCell = "SearchResultCell"
         static let nothingFoundCell = "NothingFoundCell"
         static let loadingCell = "LoadingCell"
+    }
+    
+    func sizeChanged(){
+        tableView.reloadData()
+        print("the size changed")
     }
     
     func iTunesURL(_ searchText: String, category: Int)-> URL{

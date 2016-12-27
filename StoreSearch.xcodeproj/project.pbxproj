@@ -19,6 +19,7 @@
 		CA6C4BBC1E09B515003E0307 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CA6C4BBB1E09B515003E0307 /* Assets.xcassets */; };
 		CABBF78D1E0EFB07001414E9 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABBF78C1E0EFB07001414E9 /* DetailViewController.swift */; };
 		CABBF78F1E104B12001414E9 /* DimmingPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABBF78E1E104B12001414E9 /* DimmingPresentationController.swift */; };
+		CABBF7911E121944001414E9 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABBF7901E121944001414E9 /* GradientView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		CA6C4BC01E09B515003E0307 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CABBF78C1E0EFB07001414E9 /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		CABBF78E1E104B12001414E9 /* DimmingPresentationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DimmingPresentationController.swift; path = ../DimmingPresentationController.swift; sourceTree = "<group>"; };
+		CABBF7901E121944001414E9 /* GradientView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GradientView.swift; path = ../GradientView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +71,7 @@
 		CA6C4BB31E09B515003E0307 /* StoreSearch */ = {
 			isa = PBXGroup;
 			children = (
+				CABBF7901E121944001414E9 /* GradientView.swift */,
 				CABBF78E1E104B12001414E9 /* DimmingPresentationController.swift */,
 				CA6C4BB41E09B515003E0307 /* AppDelegate.swift */,
 				CA24FAB61E09DBE50003071C /* SearchResult.swift */,
@@ -174,6 +177,7 @@
 				CA26AD091E0E365100FBE988 /* UIImageView+DownloadingImage.swift in Sources */,
 				CABBF78D1E0EFB07001414E9 /* DetailViewController.swift in Sources */,
 				CA08FEDD1E0B1B6E00236B09 /* SearchResultCell.swift in Sources */,
+				CABBF7911E121944001414E9 /* GradientView.swift in Sources */,
 				CA6C4BB51E09B515003E0307 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
