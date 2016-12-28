@@ -8,7 +8,7 @@
 
 import UIKit
 
-// we use this class and set the should Remorve presentation to false
+// we use this class and set the should Remorve presentation to false so that the table view shows in the background when the DetailViewController is presented 
 class DimmingPresentationController: UIPresentationController{
     
     

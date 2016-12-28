@@ -15,6 +15,7 @@ class SearchViewController: UIViewController {
     var hasSearched:Bool = false
     var isLoading: Bool = false
     var dataTask: URLSessionDataTask?
+    var landscapeViewController: LandscapeViewController?
     
     //MARK: IBOulet
     @IBOutlet weak var searchBar: UISearchBar!
@@ -52,15 +53,12 @@ class SearchViewController: UIViewController {
         print("segment changed \(sender.selectedSegmentIndex)")
     }
     
-    
-    
-   
-    
     struct tableViewCellIdentifiers{
         static let searchResultCell = "SearchResultCell"
         static let nothingFoundCell = "NothingFoundCell"
         static let loadingCell = "LoadingCell"
     }
+    
     
     func sizeChanged(){
         tableView.reloadData()
@@ -352,3 +350,69 @@ extension SearchViewController: UITableViewDataSource{
 extension SearchViewController: UITableViewDelegate{
     
 }
+
+//set evrything with landscapeViewController
+extension SearchViewController{
+    
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.willTransition(to: newCollection, with: coordinator)
+        
+        switch newCollection.verticalSizeClass{
+        case .compact:
+            showLandscape(with:coordinator)
+        case .regular, .unspecified:
+            hideLanscape(with: coordinator)
+        }
+    }
+    
+    func showLandscape(with coordinator: UIViewControllerTransitionCoordinator){
+        
+        guard landscapeViewController == nil else {
+            return
+        }
+        
+        landscapeViewController = storyboard!.instantiateViewController(withIdentifier: "LandscapeViewController") as? LandscapeViewController
+        if let controller = landscapeViewController{
+            controller.view.frame = view.bounds
+            controller.view.alpha = 0
+            
+            //we need to add the controller
+            view.addSubview(controller.view) //first add the view
+            addChildViewController(controller) // tell the searchViewController the screen is managed by the child view
+            
+            coordinator.animate(alongsideTransition: { _ in
+                controller.view.alpha = 1
+                //gets rid of the keyboard if is present when it goes into landscape
+                self.searchBar.resignFirstResponder()
+                //removes the detailview controller if is present
+                if self.presentedViewController != nil {
+                    self.dismiss(animated: true, completion: nil)
+                }
+            }, completion:{ _ in
+                controller.didMove(toParentViewController: self)//didMove tells the newView controller it has a parent
+                
+            })
+        }
+    }
+    
+    func hideLanscape(with coordinator: UIViewControllerTransitionCoordinator){
+        
+        if let controller = landscapeViewController{
+            
+            controller.willMove(toParentViewController: nil)
+            
+            coordinator.animate(alongsideTransition: { _ in
+                controller.view.alpha = 0
+            }, completion:{ _ in
+                
+                controller.view.removeFromSuperview()
+                controller.removeFromParentViewController()
+                self.landscapeViewController = nil
+                
+            })
+        }
+    }
+    
+    
+}
+

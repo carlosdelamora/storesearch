@@ -12,6 +12,8 @@ class DetailViewController: UIViewController {
     
     var searchResult:SearchResult!
     var downloadTask: URLSessionDownloadTask?
+    var dismissAnimationStyle = AnimationStyle.fade
+    
     
     @IBOutlet weak var popUpView: UIView!
     @IBOutlet weak var artworkImage: UIImageView!
@@ -49,6 +51,8 @@ class DetailViewController: UIViewController {
 
 
     @IBAction func close(){
+        
+        dismissAnimationStyle = .slide
         dismiss(animated: true, completion: nil)
     }
     
@@ -57,7 +61,13 @@ class DetailViewController: UIViewController {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
     }
-
+    
+    enum AnimationStyle {
+        
+        case slide
+        case fade
+    }
+    
     func updateUI(){
         
         nameLabel.text = searchResult.name
@@ -93,7 +103,7 @@ class DetailViewController: UIViewController {
 }
 
 extension DetailViewController: UIViewControllerTransitioningDelegate{
-    //set the presentation controller to be the dimmining Prsentation Controller where set that the presenting view should not be dismissed
+    //set the presentation controller to be the dimmining Prsentation Controller, it sets the presenting view should not be dismissed
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
         return DimmingPresentationController(presentedViewController: presented, presenting: presenting)
     }
@@ -105,8 +115,15 @@ extension DetailViewController: UIViewControllerTransitioningDelegate{
     
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         
-        return SlideOutAnimationController()
+        switch dismissAnimationStyle {
+        case .slide:
+            return SlideOutAnimationController()
+        case .fade:
+            return FadeOutAnimationController()
+        }
     }
+    
+    
 }
 
 extension DetailViewController: UIGestureRecognizerDelegate{
