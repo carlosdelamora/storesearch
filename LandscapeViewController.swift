@@ -20,6 +20,7 @@ class LandscapeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        pageControl.numberOfPages = 0
         
         removeContraints(aView: view)
         removeContraints(aView: pageControl)
@@ -38,6 +39,15 @@ class LandscapeViewController: UIViewController {
             firstTime = false
             titleButtons(searchResults)
         }
+    }
+    
+    @IBAction func pageChanged(_ sender: UIPageControl){
+        
+        UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseOut], animations: {
+            self.scrollView.contentOffset = CGPoint(x: self.scrollView.bounds.size.width * CGFloat(sender.currentPage), y: 0)
+        }, completion: nil)
+        
+        
     }
     
     private func titleButtons(_ searchResults: [SearchResult]){
@@ -106,6 +116,9 @@ class LandscapeViewController: UIViewController {
         let numPages = 1 + (searchResults.count - 1)/buttonsPerPage
         scrollView.contentSize = CGSize( width: CGFloat(numPages)*scrollViewWidth, height: scrollView.bounds.size.height)
         print("number of pages \(numPages)")
+        
+        pageControl.numberOfPages = numPages
+        pageControl.currentPage = 0
     }
     
     func removeContraints(aView: UIView){
@@ -117,5 +130,16 @@ class LandscapeViewController: UIViewController {
     deinit{
         print("deinit \(self)")
     }
-
+    
 }
+
+
+extension LandscapeViewController: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let width = scrollView.bounds.size.width
+        let currentPage = Int((scrollView.contentOffset.x + width/2)/width)
+        pageControl.currentPage = currentPage
+    }
+}
+
