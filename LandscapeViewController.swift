@@ -11,8 +11,9 @@ import UIKit
 class LandscapeViewController: UIViewController {
 
     
-    var searchResults = [SearchResult]()
+    var search: Search!
     private var firstTime = true
+    private var downloadTasks = [URLSessionDownloadTask]()
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var pageControl: UIPageControl!
@@ -37,7 +38,7 @@ class LandscapeViewController: UIViewController {
         
         if firstTime{
             firstTime = false
-            titleButtons(searchResults)
+            titleButtons(search.searchResults)
         }
     }
     
@@ -92,11 +93,9 @@ class LandscapeViewController: UIViewController {
         var column = 0
         var x = marginX
         
-        for (index, searchResult) in searchResults.enumerated(){
-            let button = UIButton(type: .system)
-            button.backgroundColor = UIColor.white
-            button.setTitle("\(index)", for: .normal)
-            
+        for ( _ , searchResult) in searchResults.enumerated(){
+            let button = UIButton(type: .custom)
+            downloadImage(for: searchResult, andPlaceOn: button)
             button.frame = CGRect(x: x + paddingHorizontally, y: marginY + CGFloat(row)*itemHeight + paddingVertically, width: buttonWidth, height: buttonHeight)
             
             scrollView.addSubview(button)
@@ -121,6 +120,24 @@ class LandscapeViewController: UIViewController {
         pageControl.currentPage = 0
     }
     
+    private func downloadImage( for searchResult: SearchResult, andPlaceOn button: UIButton){
+        
+        if let url = URL(string: searchResult.artworkSmallURL){
+            let downloadTask = URLSession.shared.downloadTask(with: url){
+                [ weak button] url, response, error in
+                if error == nil, let url = url, let data = try? Data(contentsOf: url), let image = UIImage(data: data){
+                    DispatchQueue.main.async {
+                        if let button = button{
+                            button.setImage(image, for: .normal)
+                        }
+                    }
+                }
+            }
+            downloadTask.resume()
+            downloadTasks.append(downloadTask)
+        }
+    }
+    
     func removeContraints(aView: UIView){
         aView.removeConstraints(aView.constraints)
         aView.translatesAutoresizingMaskIntoConstraints = true
@@ -129,6 +146,9 @@ class LandscapeViewController: UIViewController {
     
     deinit{
         print("deinit \(self)")
+        for task in downloadTasks{
+            task.cancel()
+        }
     }
     
 }
