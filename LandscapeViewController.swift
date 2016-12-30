@@ -38,7 +38,16 @@ class LandscapeViewController: UIViewController {
         
         if firstTime{
             firstTime = false
-            titleButtons(search.searchResults)
+            switch search.state{
+            case .notSearchedYet:
+                break
+            case .loading:
+                break
+            case .noResults:
+                break
+            case .results(let list):
+                titleButtons(list)
+            }
         }
     }
     
