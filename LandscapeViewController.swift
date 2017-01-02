@@ -42,7 +42,7 @@ class LandscapeViewController: UIViewController {
             case .notSearchedYet:
                 break
             case .loading:
-                break
+                showSpinner()
             case .noResults:
                 break
             case .results(let list):
@@ -60,6 +60,30 @@ class LandscapeViewController: UIViewController {
         
     }
     
+    func searchResultsRecived(){
+        hideSpinner()
+        
+        switch search.state{
+        case .notSearchedYet, .loading, .noResults:
+            break
+        case .results(let list):
+            titleButtons(list)
+        }
+    }
+    
+    func hideSpinner(){
+        view.viewWithTag(1000)?.removeFromSuperview()
+    }
+    
+    private func showSpinner(){
+        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+        spinner.center = CGPoint(x: scrollView.bounds.midX , y: scrollView.bounds.midY )
+        spinner.tag = 1000
+        view.addSubview(spinner)
+        spinner.startAnimating()
+    }
+    
+    //add the buttons to the view in landscape
     private func titleButtons(_ searchResults: [SearchResult]){
         
         var columnsPerPage = 5

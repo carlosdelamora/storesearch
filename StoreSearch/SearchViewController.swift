@@ -89,15 +89,20 @@ extension SearchViewController: UISearchBarDelegate{
     func performSearch() {
         
         if let category = Search.Category(rawValue: segmentedControl.selectedSegmentIndex){
+            
             search.performSearch(for: searchBar.text!, category: category){
-                success in
                 
+                success in
+                //change false for success
                 if !success {
                     self.showNetworkError()
+                }else{
+                    self.tableView.reloadData()
+                    self.landscapeViewController?.hideSpinner()
                 }
-                self.tableView.reloadData()
             }
             
+            //this reloadData is to show the downloading cell
             tableView.reloadData()
             searchBar.resignFirstResponder()
         }
@@ -133,8 +138,11 @@ extension SearchViewController: UITableViewDataSource{
         
         switch search.state{
         case .notSearchedYet:
-               fatalError("should never get here")
-        
+            let cell = tableView.dequeueReusableCell(withIdentifier: tableViewCellIdentifiers.loadingCell, for: indexPath)
+            let spiner = cell.viewWithTag(100) as! UIActivityIndicatorView
+            spiner.startAnimating()
+            return cell
+            
         case .loading:
             let cell = tableView.dequeueReusableCell(withIdentifier: tableViewCellIdentifiers.loadingCell, for: indexPath)
             let spiner = cell.viewWithTag(100) as! UIActivityIndicatorView

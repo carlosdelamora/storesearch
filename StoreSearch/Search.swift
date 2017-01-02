@@ -75,10 +75,10 @@ class Search {
                         }
                         success = true
                     }
-                    
-                    DispatchQueue.main.async {
-                        completion(success)
-                    }
+                }
+                
+                DispatchQueue.main.async {
+                    completion(success)
                 }
                 
             }
