@@ -5,7 +5,7 @@
 //  Created by Carlos De la mora on 12/29/16.
 //  Copyright © 2016 carlosdelamora. All rights reserved.
 //
-
+import UIKit
 import Foundation
 
 class Search {
@@ -47,7 +47,7 @@ class Search {
             
             dataTask?.cancel()
             state = .loading
-            
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
             
             
             let url = self.iTunesURL(text, category: category)
@@ -78,6 +78,7 @@ class Search {
                 }
                 
                 DispatchQueue.main.async {
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = false 
                     completion(success)
                 }
                 

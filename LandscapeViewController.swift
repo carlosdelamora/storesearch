@@ -7,7 +7,6 @@
 //
 
 import UIKit
-
 class LandscapeViewController: UIViewController {
 
     
@@ -44,7 +43,7 @@ class LandscapeViewController: UIViewController {
             case .loading:
                 showSpinner()
             case .noResults:
-                break
+                showNothingFoundLabel()
             case .results(let list):
                 titleButtons(list)
             }
@@ -64,8 +63,10 @@ class LandscapeViewController: UIViewController {
         hideSpinner()
         
         switch search.state{
-        case .notSearchedYet, .loading, .noResults:
+        case .notSearchedYet, .loading:
             break
+        case .noResults:
+            showNothingFoundLabel()
         case .results(let list):
             titleButtons(list)
         }
@@ -73,6 +74,23 @@ class LandscapeViewController: UIViewController {
     
     func hideSpinner(){
         view.viewWithTag(1000)?.removeFromSuperview()
+    }
+    
+    private func showNothingFoundLabel(){
+        let label = UILabel(frame: CGRect.zero)
+        label.text = "Nothing Found"
+        label.textColor = UIColor.white
+        label.backgroundColor = UIColor.clear
+        
+        label.sizeToFit()
+        
+        var rect = label.frame
+        rect.size.width = ceil(rect.size.width/2)*2
+        rect.size.height = ceil(rect.size.height/2)*2
+        label.frame = rect
+        
+        label.center = CGPoint(x: scrollView.bounds.midX, y: scrollView.bounds.midY)
+        view.addSubview(label)
     }
     
     private func showSpinner(){
@@ -126,8 +144,10 @@ class LandscapeViewController: UIViewController {
         var column = 0
         var x = marginX
         
-        for ( _ , searchResult) in searchResults.enumerated(){
+        for ( index, searchResult) in searchResults.enumerated(){
             let button = UIButton(type: .custom)
+            button.tag = 2000 + index
+            button.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
             downloadImage(for: searchResult, andPlaceOn: button)
             button.frame = CGRect(x: x + paddingHorizontally, y: marginY + CGFloat(row)*itemHeight + paddingVertically, width: buttonWidth, height: buttonHeight)
             
@@ -169,6 +189,22 @@ class LandscapeViewController: UIViewController {
             downloadTask.resume()
             downloadTasks.append(downloadTask)
         }
+    }
+    
+    func buttonPressed(_ sender: UIButton){
+        performSegue(withIdentifier: "ShowDetail", sender: sender)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "ShowDetail" {
+            
+            if case .results(let list) = search.state{
+                let detailViewController = segue.destination as! DetailViewController
+                let searchResult = list[(sender as! UIButton).tag - 2000]
+                detailViewController.searchResult = searchResult
+            }
+        }
+        
     }
     
     func removeContraints(aView: UIView){
