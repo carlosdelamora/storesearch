@@ -8,7 +8,7 @@
 
 import UIKit
 class LandscapeViewController: UIViewController {
-
+    
     
     var search: Search!
     private var firstTime = true
@@ -114,7 +114,7 @@ class LandscapeViewController: UIViewController {
         let scrollViewWidth = scrollView.bounds.size.width
         
         switch scrollViewWidth{
-        
+            
         case 568:
             columnsPerPage = 6
             itemWidth = 94
