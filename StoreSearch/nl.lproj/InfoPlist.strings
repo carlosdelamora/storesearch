@@ -1,0 +1,10 @@
+/* 
+  InfoPlist.strings
+  StoreSearch
+
+  Created by Carlos De la mora on 1/3/17.
+  Copyright © 2017 carlosdelamora. All rights reserved.
+*/
+
+
+CFBundleDisplayName = "StoreZoeker";

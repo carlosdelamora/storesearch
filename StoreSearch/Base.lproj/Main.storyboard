@@ -240,8 +240,9 @@
                             <constraint firstItem="DYx-vC-gwj" firstAttribute="top" relation="lessThanOrEqual" secondItem="xvo-cn-kgf" secondAttribute="bottom" constant="170" id="MLc-Zp-vve"/>
                             <constraint firstItem="DYx-vC-gwj" firstAttribute="top" secondItem="xvo-cn-kgf" secondAttribute="bottom" priority="100" constant="180" id="VeB-xe-YaP"/>
                             <constraint firstAttribute="trailingMargin" secondItem="xvo-cn-kgf" secondAttribute="trailing" constant="29" id="jmC-ui-EGQ"/>
-                            <constraint firstItem="xvo-cn-kgf" firstAttribute="top" secondItem="Yfp-V9-lKc" secondAttribute="bottom" constant="128" id="rK4-tR-4qu"/>
+                            <constraint firstItem="xvo-cn-kgf" firstAttribute="top" relation="lessThanOrEqual" secondItem="Yfp-V9-lKc" secondAttribute="bottom" constant="128" id="rK4-tR-4qu"/>
                             <constraint firstItem="xvo-cn-kgf" firstAttribute="leading" secondItem="sAF-ot-SAF" secondAttribute="leadingMargin" constant="19" id="t9N-fh-cQQ"/>
+                            <constraint firstItem="xvo-cn-kgf" firstAttribute="top" secondItem="Yfp-V9-lKc" secondAttribute="bottom" priority="500" constant="128" id="u7O-F2-4fv"/>
                         </constraints>
                     </view>
                     <connections>
