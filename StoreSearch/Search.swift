@@ -10,6 +10,7 @@ import Foundation
 
 class Search {
     
+    private var dataTask: URLSessionDataTask? = nil
     private(set) var state: State = .notSearchedYet
     typealias  SearchComplete = (Bool) -> Void
     
@@ -38,7 +39,6 @@ class Search {
         }
     }
     
-    private var dataTask: URLSessionDataTask? = nil
     
     func performSearch (for text: String, category: Category, completion: @escaping SearchComplete ){
         
